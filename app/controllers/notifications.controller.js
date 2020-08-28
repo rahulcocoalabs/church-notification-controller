@@ -199,7 +199,9 @@ function notificationsController(methods, options) {
 
         // using async/await
         try {
-           
+           console.log("notificationData")
+           console.log(notificationData)
+           console.log("notificationData")
             const response = await this.oneSignalClient.createNotification(notificationData);
             console.log("response");
             console.log(response);
