@@ -4,13 +4,16 @@ const OneSignal = require('onesignal-node');
 const ONE_SIGNAL_APP_ID = "b75e1d5c-cf49-42cd-b257-3d3f177f1342";
 const ONE_SGINAL_API_KEY = "";
 const client = new OneSignal.Client('65011cfa-62d9-4e0c-b249-cb3f679da7d9', 'ZGUxYThkNzctM2MxMC00MWM0LTk3Y2YtYjk5MDY1NGQxMThk');
-const MongodbPushMessage = require('../models/pushNotification.model');
 const config = require('../../config/app.config');
 const oneSignalConfig = config.oneSignal;
+var MongodbPushMessage = require('../models/pushNotification.model');
+var Church = require('../models/church.model');
 
 function notificationsController(methods, options) {
 
     const constants = require('../helpers/constants');
+    // const MongodbPushMessage = methods.loadModel('pushNotification');
+    // const Church = methods.loadModel('church');
 
     // const Notification = methods.loadModel('notification');
 
@@ -25,7 +28,9 @@ function notificationsController(methods, options) {
 
        
         await this.loadSettings();
-
+        console.log("this.oneSignalConfig")
+        console.log(this.oneSignalConfig)
+        console.log("this.oneSignalConfig")
         if (this.oneSignalConfig) {
             this.oneSignalClient = new OneSignal.Client(this.oneSignalConfig.oneSignalAppId, this.oneSignalConfig.oneSignalApiKey);
         }
@@ -58,41 +63,7 @@ function notificationsController(methods, options) {
          * 
          */
     }
-    this.loadSettingsForMySqlDb = async () => {
-        let scanningIntervalData = await MysqlNotificationManagerConfig.findOne({
-            where: {
-                status: 1
-            },
-            // attributes: ['scanning_interval_seconds_push_messages', 'onesignal_api_key', 'onesignal_app_id']
-        })
-            .catch(err => {
-                return {
-                    success: 0,
-                    message: 'Something went wrong while getting mysql notification manager config',
-                    error: err
-                }
-            })
-        console.log("scanningIntervalData")
-        console.log(scanningIntervalData)
-        console.log("scanningIntervalData")
-        if (scanningIntervalData && (scanningIntervalData.error && scanningIntervalData.error !== null)) {
-            this.oneSignalConfig = null;
-        }else{
-            scanningIntervalData = JSON.parse(JSON.stringify(scanningIntervalData));
-            // console.log("scanningIntervalData")
-            // console.log(scanningIntervalData)
-            // console.log("scanningIntervalData")
-            this.scanningIntervalSeconds = parseFloat(scanningIntervalData.scanning_interval_seconds_push_messages);
-            this.oneSignalConfig = {
-                oneSignalAppId: scanningIntervalData.onesignal_app_id,
-                oneSignalApiKey: scanningIntervalData.onesignal_api_key,
-            }
-        }
-          console.log(" this.oneSignalConfig")
-          console.log( this.oneSignalConfig)
-          console.log( "this.oneSignalConfig")
-
-    }
+    
     this.loadSettingsForMongoDb = async () => {
         // let scanningIntervalData = await MongodbNotificationManagerConfig.findOne({
         //     status: 1
@@ -155,15 +126,19 @@ function notificationsController(methods, options) {
     }
     this.handleNewPushMessages = async (req, res) => {
         var notificationList = [];
+     
         if (!this.oneSignalConfig) {
              await this.reloadConfig();
         }
-       
+        console.log("this.handleNewPushMessages")
+        console.log("this.oneSignalConfig")
+        console.log(this.oneSignalConfig)
+        console.log("this.oneSignalConfig")
             notificationList = await this.getPushMessageFromMongoDb();
    
         console.log("Notification list received");
         await this.processPushNessages(notificationList) 
-        this.isProcessingOnGoing  = false;
+        // this.isProcessingOnGoing  = false;
     }
 
     this.processPushNessages = async (notificationsList) => {
@@ -181,6 +156,8 @@ function notificationsController(methods, options) {
  
 
     this.getPushMessageFromMongoDb = async () => {
+        console.log("inside getPushMessageFromMongoDb")
+       
         let notificationList = await MongodbPushMessage.find({
             isSent: 0,
             status: 1
@@ -192,9 +169,11 @@ function notificationsController(methods, options) {
                     error: err
                 }
             })
+      
         if (notificationList && notificationList.error && (notificationList.error !== null)) {
             return [];
         }
+
        
         return notificationList;
         //return all messages with status 1 and not sent, from mongo db

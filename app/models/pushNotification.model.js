@@ -23,21 +23,21 @@ var options = {
 };
 const PushNotificationSchema = mongoose.Schema({
     type : String,
-    eventId : {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Post' 
-    },
-    charityId : {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Charity' 
-    },
-    sermonsId : {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Post' 
-    },
-    churchId : {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Church' 
-    },
-    userId : {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User' 
-    },
+    // eventId : {
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Post' 
+    // },
+    // charityId : {
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Charity' 
+    // },
+    // sermonsId : {
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Post' 
+    // },
+    // churchId : {
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Church' 
+    // },
+    // userId : {
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'User' 
+    // },
     referenceId: String,
     title: String,
     messageText: String,
