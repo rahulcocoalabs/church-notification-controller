@@ -7,13 +7,10 @@ const client = new OneSignal.Client('65011cfa-62d9-4e0c-b249-cb3f679da7d9', 'ZGU
 const config = require('../../config/app.config');
 const oneSignalConfig = config.oneSignal;
 var MongodbPushMessage = require('../models/pushNotification.model');
-var Church = require('../models/church.model');
 
 function notificationsController(methods, options) {
 
     const constants = require('../helpers/constants');
-    // const MongodbPushMessage = methods.loadModel('pushNotification');
-    // const Church = methods.loadModel('church');
 
     // const Notification = methods.loadModel('notification');
 
