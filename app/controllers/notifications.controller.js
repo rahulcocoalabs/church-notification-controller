@@ -127,15 +127,11 @@ function notificationsController(methods, options) {
         if (!this.oneSignalConfig) {
              await this.reloadConfig();
         }
-        console.log("this.handleNewPushMessages")
-        console.log("this.oneSignalConfig")
-        console.log(this.oneSignalConfig)
-        console.log("this.oneSignalConfig")
+     
             notificationList = await this.getPushMessageFromMongoDb();
    
-        console.log("Notification list received");
         await this.processPushNessages(notificationList) 
-        // this.isProcessingOnGoing  = false;
+        this.isProcessingOnGoing  = false;
     }
 
     this.processPushNessages = async (notificationsList) => {
